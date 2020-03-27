@@ -44,12 +44,10 @@ public class UpdatePassActivity extends AppCompatActivity {
             etPass.setError("diisi ya");
             etCPass.setError("diisi ya");
             if (confirm) {
-                etPass.setError("ngga sama");
-                etCPass.setError("ngga sama");
+                Toast.makeText(UpdatePassActivity.this, "the confirmation is not the same", Toast.LENGTH_SHORT).show();
             }
             if (dataLength) {
-                etPass.setError("minim 8");
-                etCPass.setError("minim 8");
+                Toast.makeText(UpdatePassActivity.this, "Data length min 8 characters", Toast.LENGTH_SHORT).show();
             }
         } else {
             updatePass();
