@@ -50,6 +50,9 @@
         android:layout_marginRight="30pt"
         android:onClick="handleUpdatePassProses"
         android:text="Update"
+        android:layout_margin="10pt"
+        android:padding="5pt"
+        android:textSize="8pt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edtCPass" />

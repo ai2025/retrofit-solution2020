@@ -43,11 +43,13 @@
 
     <Button
         android:id="@+id/btn_up_prof"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20pt"
         android:onClick="handleUpdateProcess"
         android:text="Update"
+        android:layout_margin="10pt"
+        android:padding="5pt"
+        android:textSize="8pt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/til_email" />
