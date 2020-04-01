@@ -2,7 +2,6 @@ package id.putraprima.retrofit.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -11,17 +10,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import id.putraprima.retrofit.R;
 import id.putraprima.retrofit.api.helper.ServiceGenerator;
+import id.putraprima.retrofit.api.models.ApiError;
+import id.putraprima.retrofit.api.models.DataApp;
+import id.putraprima.retrofit.api.models.ErrorUtils;
 import id.putraprima.retrofit.api.models.ProfileRequest;
 import id.putraprima.retrofit.api.models.ProfileResponse;
-import id.putraprima.retrofit.api.models.Session;
 import id.putraprima.retrofit.api.services.ApiInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UpdateActivity extends AppCompatActivity {
-    //    public ProfileRequest profileReq;
-    private Session sess;
+    private ProfileRequest profileReq;
+    private DataApp sess;
     private EditText tilNama, tilEmail;
     private String email, name, token;
 //    TextInputEditText tilNama, tilEmail;
@@ -30,7 +31,7 @@ public class UpdateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
-        sess = new Session(this);
+        sess = new DataApp(this);
         tilNama = findViewById(R.id.til_nama);
         tilEmail = findViewById(R.id.til_email);
         token = sess.getTokenType() + " " + sess.getToken();
@@ -39,39 +40,49 @@ public class UpdateActivity extends AppCompatActivity {
     public void handleUpdateProcess(View view) {
         name = tilNama.getText().toString();
         email = tilEmail.getText().toString();
-        boolean cek = name.equals("") && email.equals("");
-        boolean cekEmail = !Patterns.EMAIL_ADDRESS.matcher(email).matches();
-//        if (cek || cekEmail){
-        if (cek || cekEmail) {
-            tilNama.setError("Namanya diisi dong");
-            tilEmail.setError("Emailnya salah");
-        } else {
-            updateProf();
-        }
-//            if (cekEmail){
-//                tilEmail.setError("Emailnya salah");
-//            }
+        updateProf();
     }
 
     public void updateProf() {
-//        profileReq = new ProfileRequest(name, email);
+        profileReq = new ProfileRequest(email, name);
         ApiInterface service = ServiceGenerator.createService(ApiInterface.class);
-        System.out.println("email : " + email);
-        System.out.println("name : " + name);
-        Call<ProfileResponse> call = service.doUpdateProfile(token, new ProfileRequest(email, name));
+        Call<ProfileResponse> call = service.doUpdateProfile(token, profileReq);
         call.enqueue(new Callback<ProfileResponse>() {
             @Override
             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
-                if (response.body() != null) {
-//                    final AlertDialog.Builder builder = new AlertDialog.Builder(UpdateActivity.this);
-//                    Toast.makeText(UpdateActivity.this, response.body().getName(), Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(UpdateActivity.this, response.body().getEmail(), Toast.LENGTH_SHORT).show();
+                if (response.code() == 200) {
                     Toast.makeText(UpdateActivity.this, "Update Successfull", Toast.LENGTH_SHORT).show();
-
                     Intent i = new Intent(UpdateActivity.this, ProfileActivity.class);
                     startActivity(i);
                 } else {
-                    Toast.makeText(UpdateActivity.this, "Update Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                    ApiError error = ErrorUtils.parseError(response);
+                    String msgEmail = "", msgName = "";
+                    int i = 0;
+                    if (error.getError().getEmail() != null && error.getError().getName() != null) {
+                        while (i < error.getError().getEmail().size()) {
+                            msgEmail += error.getError().getEmail().get(i);
+                            i++;
+                        }
+                        tilEmail.setError(msgEmail);
+                        i = 0;
+                        while (i < error.getError().getName().size()) {
+                            msgName += error.getError().getName().get(i);
+                            i++;
+                        }
+                        tilNama.setError(msgName);
+                    } else if (error.getError().getName() != null) {
+                        while (i < error.getError().getName().size()) {
+                            msgName += error.getError().getName().get(i);
+                            i++;
+                        }
+                        tilNama.setError(msgName);
+                    } else if (error.getError().getEmail() != null) {
+                        while (i < error.getError().getEmail().size()) {
+                            msgEmail += error.getError().getEmail().get(i);
+                            i++;
+                        }
+                        tilEmail.setError(msgEmail);
+                    }
                 }
             }
 

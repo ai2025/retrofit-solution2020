@@ -1,7 +1,10 @@
 package id.putraprima.retrofit.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,34 +15,41 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import id.putraprima.retrofit.R;
 import id.putraprima.retrofit.api.helper.ServiceGenerator;
+import id.putraprima.retrofit.api.models.ApiError;
+import id.putraprima.retrofit.api.models.ErrorUtils;
 import id.putraprima.retrofit.api.models.LoginRequest;
 import id.putraprima.retrofit.api.models.LoginResponse;
-import id.putraprima.retrofit.api.models.Session;
 import id.putraprima.retrofit.api.services.ApiInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    private Button loginButton, registerButton;
-    private EditText edtEmail, edtPassword;
-    private TextView txtApp, txtVer;
-    private String email, password;
-    private Session sess;
+    //    SplashActivity appNameVer;
+    Context context;
+    TextView txtApp, txtVer;
+    Button loginButton, registerButton;
+    EditText edtEmail, edtPassword;
+    String email, password, msgEmail, msgPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context = getApplicationContext();
         loginButton = findViewById(R.id.btnLogin);
         registerButton = findViewById(R.id.bntToRegister);
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
-        sess = new Session(this);
         txtApp = findViewById(R.id.mainTxtAppName);
         txtVer = findViewById(R.id.mainTxtAppVersion);
-        txtApp.setText(sess.getDataApp());
-        txtVer.setText(sess.getDataVersion());
+        getAppNameVer();
+    }
+
+    public void getAppNameVer() {
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
+        txtApp.setText(preference.getString("appName", "default"));
+        txtVer.setText(preference.getString("appVersion", "default"));
     }
 
     public void handleLoginClick(View view) {
@@ -50,20 +60,54 @@ public class MainActivity extends AppCompatActivity {
 
     private void doLogin() {
         ApiInterface service = ServiceGenerator.createService(ApiInterface.class);
-        LoginRequest loginRequest = new LoginRequest(email,password);
-        Call<LoginResponse> call = service.doLogin(loginRequest);
+        LoginRequest loginRequest = new LoginRequest(email, password);
+        Call<LoginResponse> call = service.doLoginReq(loginRequest);
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if (response.body() != null) {
+                if (response.code() == 200) {
                     Toast.makeText(MainActivity.this, "Connected :)", Toast.LENGTH_SHORT).show();
-                    sess.setToken(response.body().token);
-                    sess.setTokenType(response.body().token_type);
-                    if (response.body().token != null || response.body().token != "") {
-                        Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-                        startActivity(i);
-                    } else {
-                        Toast.makeText(MainActivity.this, "Token is null", Toast.LENGTH_SHORT).show();
+                    SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = preference.edit();
+                    editor.putString("token", response.body().getToken());
+                    editor.apply();
+                    Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                    startActivity(i);
+                } else {
+                    ApiError error = ErrorUtils.parseError(response);
+                    msgEmail = " ";
+                    msgPass = " ";
+                    int i = 0;
+                    if (error.getError().getEmail() != null && error.getError().getPassword() != null) {
+                        while (i < error.getError().getEmail().size()) {
+                            msgEmail += error.getError().getEmail().get(i);
+                            i++;
+                        }
+                        edtEmail.setError(msgEmail);
+                        i = 0;
+                        while (i < error.getError().getPassword().size()) {
+                            msgPass += error.getError().getPassword().get(i);
+                            i++;
+                        }
+                        edtPassword.setError(msgPass);
+                    } else if (error.getError().getEmail() != null) {
+                        if (error.getError().getEmail().get(0).equals("These credentials do not match our records.")) {
+                            Toast.makeText(MainActivity.this, error.getError().getEmail().get(0), Toast.LENGTH_SHORT).show();
+                        } else {
+                            i = 0;
+                            while (i < error.getError().getEmail().size()) {
+                                msgEmail += error.getError().getEmail().get(i);
+                                i++;
+                            }
+                            edtEmail.setError(msgEmail);
+                        }
+                    } else if (error.getError().getPassword() != null) {
+                        i = 0;
+                        while (i < error.getError().getPassword().size()) {
+                            msgPass += error.getError().getPassword().get(i);
+                            i++;
+                        }
+                        edtPassword.setError(msgPass);
                     }
                 }
             }

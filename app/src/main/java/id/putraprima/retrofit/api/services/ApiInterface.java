@@ -2,7 +2,6 @@ package id.putraprima.retrofit.api.services;
 
 
 import id.putraprima.retrofit.api.models.AppVersion;
-import id.putraprima.retrofit.api.models.Data;
 import id.putraprima.retrofit.api.models.Envelope;
 import id.putraprima.retrofit.api.models.LoginRequest;
 import id.putraprima.retrofit.api.models.LoginResponse;
@@ -23,19 +22,14 @@ import retrofit2.http.POST;
 public interface ApiInterface{
     @GET("/")
     Call<AppVersion> getAppVersion();
-
     @POST("/api/auth/login")
-    Call<LoginResponse> doLogin(@Body LoginRequest loginRequest);
-
+    Call<LoginResponse> doLoginReq(@Body LoginRequest loginRequest);
     @POST("/api/auth/register")
     Call<Envelope<RegisterResponse>> doRegister(@Body RegisterRequest registerRequest);
-
     @GET("/api/auth/me")
-    Call<Data<UserInfo>> me(@Header("Authorization") String token);
-
+    Call<Envelope<UserInfo>> me();
     @PATCH("/api/account/profile")
-    Call<ProfileResponse> doUpdateProfile(@Header("Authorization") String token, @Body ProfileRequest profileRequest);
-
+    Call<ProfileResponse> doUpdateProfile(@Header("Authorization") String token, @Body ProfileRequest req);
     @PATCH("/api/account/password")
-    Call<PasswordResponse> doUpdatePassword(@Header("Authorization") String token, @Body PasswordRequest passwordRequest);
+    Call<PasswordResponse> doUpdatePassword(@Header("Authorization") String token, @Body PasswordRequest req);
 }

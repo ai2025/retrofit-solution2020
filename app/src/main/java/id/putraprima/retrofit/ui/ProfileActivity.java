@@ -1,7 +1,10 @@
 package id.putraprima.retrofit.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -10,8 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import id.putraprima.retrofit.R;
 import id.putraprima.retrofit.api.helper.ServiceGenerator;
-import id.putraprima.retrofit.api.models.Data;
-import id.putraprima.retrofit.api.models.Session;
+import id.putraprima.retrofit.api.models.Envelope;
 import id.putraprima.retrofit.api.models.UserInfo;
 import id.putraprima.retrofit.api.services.ApiInterface;
 import retrofit2.Call;
@@ -19,39 +21,33 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProfileActivity extends AppCompatActivity {
-    //    public Context context;
+    public Context context;
     private TextView tvName, tvEmail;
-    private String dToken, dTokenType;
-    private Session sess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        sess = new Session(this);
+        context = getApplicationContext();
         tvName = findViewById(R.id.Name);
         tvEmail = findViewById(R.id.Email);
-        dToken = sess.getToken();
-        dTokenType = sess.getTokenType();
         getDatas();
     }
 
     public void getDatas() {
-        ApiInterface service = ServiceGenerator.createService(ApiInterface.class);
-        Call<Data<UserInfo>> call = service.me(dTokenType + " " + dToken);
-        call.enqueue(new Callback<Data<UserInfo>>() {
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
+        ApiInterface service = ServiceGenerator.createService(ApiInterface.class, "Bearer " + preference.getString("token", null));
+        Call<Envelope<UserInfo>> call = service.me();
+        call.enqueue(new Callback<Envelope<UserInfo>>() {
             @Override
-            public void onResponse(Call<Data<UserInfo>> call, Response<Data<UserInfo>> response) {
-                if (response.body() != null) {
-                    Toast.makeText(ProfileActivity.this, response.body().data.getEmail(), Toast.LENGTH_SHORT).show();
-                    tvName.setText(response.body().data.name);
-                    tvEmail.setText(response.body().data.email);
-                }
+            public void onResponse(Call<Envelope<UserInfo>> call, Response<Envelope<UserInfo>> response) {
+                tvName.setText(response.body().getData().getName());
+                tvEmail.setText(response.body().getData().getEmail());
             }
 
             @Override
-            public void onFailure(Call<Data<UserInfo>> call, Throwable t) {
-                Toast.makeText(ProfileActivity.this, "Error Request", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<Envelope<UserInfo>> call, Throwable t) {
+                Toast.makeText(ProfileActivity.this, "Gagal Koneksi Server", Toast.LENGTH_SHORT).show();
             }
         });
     }
