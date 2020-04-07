@@ -21,6 +21,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface ApiInterface{
     @GET("/")
@@ -33,13 +34,16 @@ public interface ApiInterface{
     Call<Envelope<RegisterResponse>> doRegister(@Body RegisterRequest registerRequest);
 
     @GET("/api/auth/me")
-    Call<Envelope<UserInfo>> me();
+    Call<Envelope<UserInfo>> me(@Header("Authorization") String token);
 
     @PATCH("/api/account/profile")
     Call<ProfileResponse> doUpdateProfile(@Header("Authorization") String token, @Body ProfileRequest req);
 
     @PATCH("/api/account/password")
     Call<PasswordResponse> doUpdatePassword(@Header("Authorization") String token, @Body PasswordRequest req);
+
+    @GET("/api/recipe")
+    Call<Envelope<List<RecipeResponse>>> getRecipeNext(@Query("page") int page);
 
     @GET("/api/recipe")
     Call<Envelope<List<RecipeResponse>>> getRecipe();

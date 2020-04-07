@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.RecipeActivity">
@@ -17,9 +18,10 @@
         android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnReload" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_recipe"
@@ -28,29 +30,44 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_title"
-        tools:listitem="@layout/item_recipe" />
+        app:layout_constraintTop_toBottomOf="@+id/text_title" />
 
-    <!--    <Button-->
-    <!--        android:id="@+id/btnLoad"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:onClick="handleLoadResep"-->
-    <!--        android:text="Load Resep"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"/>-->
-
-    <ProgressBar
-        android:id="@+id/loading"
+    <Button
+        android:id="@+id/btnLoadMore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:indeterminate="true"
-        android:max="1000"
-        app:layout_constraintBottom_toBottomOf="@+id/rv_recipe"
+        android:layout_margin="8dp"
+        android:onClick="handleLoadMore"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:text="Load More Recipes"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnReload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:onClick="handleReload"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:text="load"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!--    <ProgressBar-->
+    <!--        android:id="@+id/loading"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="center_horizontal"-->
+    <!--        android:indeterminate="true"-->
+    <!--        android:max="1000"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/rv_recipe"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

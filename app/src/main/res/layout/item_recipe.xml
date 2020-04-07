@@ -41,34 +41,35 @@
                 android:layout_margin="8dp"
                 android:orientation="vertical">
 
-                <!--            <TextView-->
-                <!--                android:layout_width="match_parent"-->
-                <!--                android:layout_height="match_parent"-->
-                <!--                android:layout_margin="3dp"-->
-                <!--                android:textSize="13sp"-->
-                <!--                tools:text="Id: "-->
-                <!--                />-->
+                <TextView
+                    android:id="@+id/judulId"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:text="ID: "
+                    android:textSize="18sp"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="3dp"
-                    android:textSize="13sp"
-                    tools:text="Deskripsi: " />
+                    android:text="Deskripsi: "
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="3dp"
-                    android:textSize="13sp"
-                    tools:text="Bahan: " />
+                    android:text="Bahan: "
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="3dp"
-                    android:textSize="13sp"
-                    tools:text="Langkah Pembuatan: " />
+                    android:text="Langkah Pembuatan: "
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -78,21 +79,21 @@
                 android:layout_weight="2"
                 android:orientation="vertical">
 
-                <!--            <TextView-->
-                <!--                android:id="@+id/id_recipe"-->
-                <!--                android:layout_width="match_parent"-->
-                <!--                android:layout_height="match_parent"-->
-                <!--                android:layout_margin="3dp"-->
-                <!--                android:textSize="13sp"-->
-                <!--                tools:text="Club Name"-->
-                <!--                />-->
+                <TextView
+                    android:id="@+id/id_recipe"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:textSize="18sp"
+                    android:visibility="invisible"
+                    tools:text="Club Name" />
 
                 <TextView
                     android:id="@+id/deskripsi"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="3dp"
-                    android:textSize="13sp"
+                    android:textSize="18sp"
                     tools:text="Club Name" />
 
                 <TextView
@@ -100,7 +101,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="3dp"
-                    android:textSize="13sp"
+                    android:textSize="18sp"
                     tools:text="Club Name" />
 
                 <TextView
@@ -108,7 +109,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="3dp"
-                    android:textSize="13sp"
+                    android:textSize="18sp"
                     tools:text="Club Name" />
             </LinearLayout>
 

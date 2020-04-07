@@ -37,7 +37,7 @@
         android:ems="10"
         android:hint="email"
         android:inputType="textEmailAddress"
-        android:text="admin@app.id"
+        android:text="aisyah@mmail.co"
         app:layout_constraintBottom_toTopOf="@+id/edtPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -54,6 +54,16 @@
         app:layout_constraintBottom_toTopOf="@+id/btnLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnRecipe"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:onClick="handleRecipe"
+        android:text="recipe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/mainTxtAppName"

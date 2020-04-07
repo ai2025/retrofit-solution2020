@@ -37,7 +37,7 @@ public class ProfileActivity extends AppCompatActivity {
     public void getDatas() {
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
         ApiInterface service = ServiceGenerator.createService(ApiInterface.class, "Bearer " + preference.getString("token", null));
-        Call<Envelope<UserInfo>> call = service.me();
+        Call<Envelope<UserInfo>> call = service.me("Bearer" + " " + preference.getString("token", null));
         call.enqueue(new Callback<Envelope<UserInfo>>() {
             @Override
             public void onResponse(Call<Envelope<UserInfo>> call, Response<Envelope<UserInfo>> response) {
