@@ -34,11 +34,12 @@ public class RecipeActivity extends AppCompatActivity {
     RecipeAdapter adapter;
 
     Button btnLoadMore, btnReload, showbtn;
-    ProgressDialog progressDialog;
     ConstraintLayout constraintLayout;
+    ProgressDialog progressDialog;
+    ProgressBar loading;
+
     boolean status, statusR, statusM;
     int page, id;
-    private ProgressBar loading;
     String nama, deskripsi, bahan, langkah, foto;
 
     @Override
