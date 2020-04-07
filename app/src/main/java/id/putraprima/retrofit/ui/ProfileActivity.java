@@ -61,4 +61,9 @@ public class ProfileActivity extends AppCompatActivity {
         Intent i = new Intent(ProfileActivity.this, UpdatePassActivity.class);
         startActivity(i);
     }
+
+    public void handleGoToRV(View view) {
+        Intent i = new Intent(ProfileActivity.this, RecipeActivity.class);
+        startActivity(i);
+    }
 }

@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         getAppNameVer();
     }
 
+//    indikator atau feedback kepada user bahwa ada kondisi yang salah di dalam program
+
     public void getAppNameVer() {
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
         txtApp.setText(preference.getString("appName", "default"));

@@ -58,12 +58,39 @@ public class RegisterActivity extends AppCompatActivity {
                             msgName += error.getError().getName().get(i);
                             i++;
                         }
+                        if (error.getError().getEmail() != null) {
+                            String msgEmail = "";
+                            i = 0;
+                            while (i < error.getError().getEmail().size()) {
+                                msgEmail += error.getError().getEmail().get(i);
+                                i++;
+                            }
+                            if (error.getError().getPassword() != null) {
+                                String msgPass = "";
+                                i = 0;
+                                while (i < error.getError().getPassword().size()) {
+                                    msgPass += error.getError().getPassword().get(i) + "\n";
+                                    i++;
+                                }
+                                mPassword.setError(msgPass);
+                            }
+                            mEmail.setError(msgEmail);
+                        }
                         mUsername.setError(msgName);
                     } else if (error.getError().getEmail() != null) {
                         String msgEmail = "";
                         while (i < error.getError().getEmail().size()) {
                             msgEmail += error.getError().getEmail().get(i);
                             i++;
+                        }
+                        if (error.getError().getPassword() != null) {
+                            String msgPass = "";
+                            i = 0;
+                            while (i < error.getError().getPassword().size()) {
+                                msgPass += error.getError().getPassword().get(i) + "\n";
+                                i++;
+                            }
+                            mPassword.setError(msgPass);
                         }
                         mEmail.setError(msgEmail);
                     } else if (error.getError().getPassword() != null) {
