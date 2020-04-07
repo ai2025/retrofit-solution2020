@@ -20,7 +20,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnReload" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -34,7 +34,7 @@
 
     <Button
         android:id="@+id/btnLoadMore"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:onClick="handleLoadMore"
@@ -42,32 +42,47 @@
         android:paddingBottom="15dp"
         android:text="Load More Recipes"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/showBtn"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnReload"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:onClick="handleReload"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:text="load"
+        android:text="Reload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/showBtn" />
+
+    <Button
+        android:id="@+id/showBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:onClick="handleBtn"
+        android:paddingLeft="0dp"
+        android:paddingTop="13dp"
+        android:paddingRight="0dp"
+        android:paddingBottom="13dp"
+        app:icon="@drawable/ic_dehaze_white_24dp"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:indeterminate="true"
+        android:max="1000"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_recipe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <!--    <ProgressBar-->
-    <!--        android:id="@+id/loading"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="center_horizontal"-->
-    <!--        android:indeterminate="true"-->
-    <!--        android:max="1000"-->
-    <!--        app:layout_constraintBottom_toBottomOf="@+id/rv_recipe"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

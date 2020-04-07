@@ -3,14 +3,18 @@ package id.putraprima.retrofit.ui;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +32,13 @@ import retrofit2.Response;
 public class RecipeActivity extends AppCompatActivity {
     ArrayList<RecipeResponse> recipes;
     RecipeAdapter adapter;
+
+    Button btnLoadMore, btnReload, showbtn;
     ProgressDialog progressDialog;
-    Button btnLoadMore, btnReload;
-
-    int page;
-
-    int id;
+    ConstraintLayout constraintLayout;
+    boolean status, statusR, statusM;
+    int page, id;
+    private ProgressBar loading;
     String nama, deskripsi, bahan, langkah, foto;
 
     @Override
@@ -41,8 +46,11 @@ public class RecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
+        constraintLayout = findViewById(R.id.recipeLayout);
         btnLoadMore = findViewById(R.id.btnLoadMore);
         btnReload = findViewById(R.id.btnReload);
+        showbtn = findViewById(R.id.showBtn);
+        loading = findViewById(R.id.loading);
 
         recipes = new ArrayList<>();
 
@@ -53,12 +61,35 @@ public class RecipeActivity extends AppCompatActivity {
         adapter = new RecipeAdapter(recipes);
         recipeView.setAdapter(adapter);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Please Wait..");
-        progressDialog.show();
+        loading.setVisibility(View.VISIBLE);
+
+        status = false;
+        statusR = false;
+        statusM = false;
+        statusBtn(statusR, statusM);
 
         page = 1;
         doReload();
+    }
+
+    private void statusBtn(boolean statusR, boolean statusM) {
+        if (!status) {
+            btnLoadMore.setVisibility(View.GONE);
+            btnReload.setVisibility(View.GONE);
+            status = true;
+        } else {
+            if (!statusR) {
+                btnLoadMore.setVisibility(View.VISIBLE);
+                btnReload.setVisibility(View.GONE);
+            } else if (!statusM) {
+                btnLoadMore.setVisibility(View.GONE);
+                btnReload.setVisibility(View.VISIBLE);
+            } else {
+                btnLoadMore.setVisibility(View.VISIBLE);
+                btnReload.setVisibility(View.VISIBLE);
+            }
+            status = false;
+        }
     }
 
     public void doRecipe() {
@@ -68,8 +99,9 @@ public class RecipeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Envelope<List<RecipeResponse>>> call, Response<Envelope<List<RecipeResponse>>> response) {
                 if (response.isSuccessful()) {
-                    progressDialog.dismiss();
-                    btnReload.setVisibility(View.GONE);
+                    statusR = false;
+                    statusM = true;
+                    statusBtn(statusR, statusM);
                     for (int i = 0; i < response.body().getData().size(); i++) {
                         id = response.body().getData().get(i).getId();
                         nama = response.body().getData().get(i).getNama_resep();
@@ -88,6 +120,7 @@ public class RecipeActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     alert.setCancelable(true);
+                                    loading.setVisibility(View.GONE);
                                 }
                             })
                             .setCancelable(false);
@@ -134,7 +167,12 @@ public class RecipeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Envelope<List<RecipeResponse>>> call, Response<Envelope<List<RecipeResponse>>> response) {
                 if (response.isSuccessful()) {
-                    btnReload.setVisibility(View.VISIBLE);
+                    statusM = false;
+                    statusR = true;
+                    statusBtn(statusR, statusM);
+                    progressDialog = new ProgressDialog(RecipeActivity.this);
+                    progressDialog.setMessage("Please Wait..");
+                    progressDialog.show();
                     if (response.body().getData().size() != 0) {
                         for (int i = 0; i < response.body().getData().size(); i++) {
                             int id = response.body().getData().get(i).getId();
@@ -146,17 +184,17 @@ public class RecipeActivity extends AppCompatActivity {
                             recipes.add(new RecipeResponse(id, namaResep, deskripsi, bahan, langkahPembuatan, foto));
                             adapter.notifyDataSetChanged();
                         }
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(RecipeActivity.this);
-                        alert.setTitle("Notification")
-                                .setMessage("Your data have been succesfully loaded")
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        alert.setCancelable(true);
-                                    }
-                                })
-                                .setCancelable(false);
-                        alert.show();
+                        progressDialog.dismiss();
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                statusM = true;
+                                statusBtn(statusR, statusM);
+                            }
+                        }, 1590);
+                        Snackbar snackbar = Snackbar.make(constraintLayout, "Your data have been succesfully loaded", Snackbar.LENGTH_SHORT);
+                        snackbar.show();
                         page++;
                     } else {
                         final AlertDialog.Builder alert = new AlertDialog.Builder(RecipeActivity.this);
@@ -165,7 +203,8 @@ public class RecipeActivity extends AppCompatActivity {
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        btnLoadMore.setVisibility(View.GONE);
+                                        statusM = false;
+                                        statusBtn(statusR, statusM);
                                         alert.setCancelable(true);
                                     }
                                 })
@@ -175,11 +214,11 @@ public class RecipeActivity extends AppCompatActivity {
                 } else {
                     final AlertDialog.Builder alert = new AlertDialog.Builder(RecipeActivity.this);
                     alert.setTitle("Notification")
-                            .setMessage("Check your internet connection!")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            .setMessage("Your data cant be loaded")
+                            .setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    btnLoadMore.setVisibility(View.GONE);
+                                    doRecipe();
                                     alert.setCancelable(true);
                                 }
                             })
@@ -190,7 +229,17 @@ public class RecipeActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Envelope<List<RecipeResponse>>> call, Throwable t) {
-                Toast.makeText(RecipeActivity.this, "koneksinyaa", Toast.LENGTH_SHORT).show();
+                final AlertDialog.Builder alert = new AlertDialog.Builder(RecipeActivity.this);
+                alert.setTitle("Notification")
+                        .setMessage("Check your internet connection!")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                alert.setCancelable(true);
+                            }
+                        })
+                        .setCancelable(false);
+                alert.show();
             }
         });
     }
@@ -202,11 +251,17 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     public void handleReload(View view) {
-        btnLoadMore.setVisibility(View.VISIBLE);
+        statusM = true;
+        statusR = true;
+        statusBtn(statusR, statusM);
         doReload();
     }
 
     public void handleLoadMore(View view) {
         doLoadMore();
+    }
+
+    public void handleBtn(View view) {
+        statusBtn(statusR, statusM);
     }
 }
