@@ -23,6 +23,7 @@ import retrofit2.Response;
 public class ProfileActivity extends AppCompatActivity {
     public Context context;
     private TextView tvName, tvEmail;
+    public int idUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
         call.enqueue(new Callback<Envelope<UserInfo>>() {
             @Override
             public void onResponse(Call<Envelope<UserInfo>> call, Response<Envelope<UserInfo>> response) {
+                idUser = response.body().getData().getId();
                 tvName.setText(response.body().getData().getName());
                 tvEmail.setText(response.body().getData().getEmail());
             }
@@ -62,7 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public void handleGoToRV(View view) {
+    public void handleAddRecipe(View view) {
         Intent i = new Intent(ProfileActivity.this, RecipeActivity.class);
         startActivity(i);
     }

@@ -2,6 +2,7 @@ package id.putraprima.retrofit.api.services;
 
 
 import java.util.List;
+import java.util.Map;
 
 import id.putraprima.retrofit.api.models.AppVersion;
 import id.putraprima.retrofit.api.models.Envelope;
@@ -15,12 +16,18 @@ import id.putraprima.retrofit.api.models.RecipeResponse;
 import id.putraprima.retrofit.api.models.RegisterRequest;
 import id.putraprima.retrofit.api.models.RegisterResponse;
 import id.putraprima.retrofit.api.models.UserInfo;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 
 public interface ApiInterface{
@@ -47,4 +54,10 @@ public interface ApiInterface{
 
     @GET("/api/recipe")
     Call<Envelope<List<RecipeResponse>>> getRecipe();
+
+    @Multipart
+    @POST("api/recipe")
+    Call<Envelope<ResponseBody>> uploadImg(@Header("Authorization") String token,
+                                           @Body @PartMap Map<String, RequestBody> text,
+                                           @Part MultipartBody.Part photo);
 }

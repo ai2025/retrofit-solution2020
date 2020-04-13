@@ -62,7 +62,7 @@
         android:layout_marginLeft="15pt"
         android:layout_marginRight="15pt"
         android:layout_marginBottom="10pt"
-        android:onClick="handleGoToRV"
+        android:onClick="handleAddRecipe"
         android:padding="6pt"
         android:text="Recipes"
         android:textSize="8pt"
