@@ -65,7 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void handleAddRecipe(View view) {
-        Intent i = new Intent(ProfileActivity.this, RecipeActivity.class);
+        Intent i = new Intent(ProfileActivity.this, RecipeAddActivity.class);
         startActivity(i);
     }
 }

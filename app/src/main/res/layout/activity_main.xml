@@ -37,7 +37,7 @@
         android:ems="10"
         android:hint="email"
         android:inputType="textEmailAddress"
-        android:text="aisyah@mmail.co"
+        android:text="ppa@app.id"
         app:layout_constraintBottom_toTopOf="@+id/edtPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

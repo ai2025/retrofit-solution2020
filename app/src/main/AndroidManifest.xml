@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -15,6 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".ui.RecipeAddActivity"></activity>
         <activity android:name=".ui.RecipeActivity" />
         <activity android:name=".ui.UpdatePassActivity" />
@@ -30,5 +33,19 @@
         </activity>
         <activity android:name=".ui.MainActivity" />
     </application>
+
+    <!--    &lt;!&ndash; FileProvider settings, after this configuration you can use FileProvider in your activity. &ndash;&gt;-->
+    <!--    <provider-->
+    <!--    &lt;!&ndash; The authority of this file provider &ndash;&gt;-->
+    <!--    android:authorities="id.putraprima.retrofit.ui"-->
+    <!--    android:name="android.support.v4.content.FileProvider"-->
+    <!--    android:exported="false"-->
+    <!--    android:grantUriPermissions="true">-->
+
+    <!--    &lt;!&ndash; Specify which folder will be shared by this file provider. &ndash;&gt;-->
+    <!--    <meta-data-->
+    <!--        android:name="android.support.FILE_PROVIDER_PATHS"-->
+    <!--        android:resource="@xml/shared_file_paths" />-->
+    <!--</provider>-->
 
 </manifest>

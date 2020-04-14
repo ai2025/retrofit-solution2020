@@ -75,15 +75,53 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edt_bahan" />
 
-    <Button
-        android:id="@+id/btn_upload_foto"
+    <TextView
+        android:id="@+id/tvfoto"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:text="Foto"
+        android:textSize="10pt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_langkah_pembuatan" />
+
+    <ImageView
+        android:id="@+id/iv_foto"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:onClick="handleTakePhoto"
+        app:layout_constraintTop_toBottomOf="@id/tvfoto"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/no_image" />
+
+    <Button
+        android:id="@+id/btnSaveRecipe"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="@color/btnFoto"
-        android:onClick="handleTakePhoto"
-        android:text="Take Recipe Photo"
+        android:layout_marginRight="20dp"
+        android:onClick="handleSaveRecipe"
+        android:padding="10dp"
+        android:text="Save Recipe"
+        android:textSize="8pt"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_langkah_pembuatan" />
+        app:layout_constraintTop_toBottomOf="@id/iv_foto" />
+
+    <!--    <Button-->
+    <!--        android:id="@+id/btn_upload_foto"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginLeft="20dp"-->
+    <!--        android:layout_marginTop="20dp"-->
+    <!--        android:backgroundTint="@color/btnFoto"-->
+    <!--        android:text="Take Recipe Photo"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/edt_langkah_pembuatan" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

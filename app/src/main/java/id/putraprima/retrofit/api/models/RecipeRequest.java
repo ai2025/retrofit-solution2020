@@ -8,17 +8,27 @@ public class RecipeRequest {
 //                okhttp3.MultipartBody.FORM, descriptionString);
 //    }
 
+    private int fk_user;
     private String nama_resep;
     private String deskripsi;
     private String bahan;
     private String langkah_pembuatan;
-    private String foto;
+//    private String foto;
 
-    public RecipeRequest(String nama_resep, String deskripsi, String bahan, String langkah_pembuatan) {
+    public RecipeRequest(int fk_user, String nama_resep, String deskripsi, String bahan, String langkah_pembuatan) {
+        this.fk_user = fk_user;
         this.nama_resep = nama_resep;
         this.deskripsi = deskripsi;
         this.bahan = bahan;
         this.langkah_pembuatan = langkah_pembuatan;
+    }
+
+    public int getFk_user() {
+        return fk_user;
+    }
+
+    public void setFk_user(int fk_user) {
+        this.fk_user = fk_user;
     }
 
     public String getNama_resep() {

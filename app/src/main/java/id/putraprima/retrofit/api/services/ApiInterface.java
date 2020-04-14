@@ -57,7 +57,6 @@ public interface ApiInterface{
 
     @Multipart
     @POST("api/recipe")
-    Call<Envelope<ResponseBody>> uploadImg(@Header("Authorization") String token,
-                                           @Body @PartMap Map<String, RequestBody> text,
-                                           @Part MultipartBody.Part photo);
+    Call<Envelope<List<ResponseBody>>> uploadImg(@PartMap Map<String, RequestBody> text,
+                                                 @Part MultipartBody.Part photo);
 }
