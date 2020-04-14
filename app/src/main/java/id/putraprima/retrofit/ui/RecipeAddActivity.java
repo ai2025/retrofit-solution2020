@@ -210,6 +210,7 @@ public class RecipeAddActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Envelope<List<ResponseBody>>> call, Throwable t) {
+//                gatau kenapa dia kedetect failed tapi datanya masuk :(
                 Toast.makeText(RecipeAddActivity.this, "HOREE BERHASIIL", Toast.LENGTH_LONG).show();
                 Intent i = new Intent(RecipeAddActivity.this, MainActivity.class);
                 startActivity(i);
