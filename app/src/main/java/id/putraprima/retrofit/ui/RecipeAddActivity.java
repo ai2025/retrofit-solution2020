@@ -223,7 +223,7 @@ public class RecipeAddActivity extends AppCompatActivity {
         if (bm != null) {
             uploadImg(uriFoto);
         } else {
-            Toast.makeText(this, "Capture image first", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Foto resep dulu ya :)", Toast.LENGTH_SHORT).show();
         }
     }
 }
