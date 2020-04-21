@@ -3,8 +3,10 @@ package id.putraprima.retrofit.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+
+import net.khirr.android.privacypolicy.PrivacyPolicyDialog;
 
 import id.putraprima.retrofit.R;
 import id.putraprima.retrofit.api.helper.ServiceGenerator;
@@ -32,10 +42,68 @@ public class MainActivity extends AppCompatActivity {
     EditText edtEmail, edtPassword;
     String email, password, msgEmail, msgPass;
 
+    private InterstitialAd mInterstitialAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        PrivacyPolicyDialog dialog = new PrivacyPolicyDialog(this,
+                "https://localhost/terms",
+                "https://localhost/privacy");
+
+        dialog.addPoliceLine("This application uses a unique user identifier for advertising purposes, it is shared with third-party companies.");
+        dialog.addPoliceLine("This application sends error reports, installation and send it to a server of the Fabric.io company to analyze and process it.");
+        dialog.addPoliceLine("This application requires internet access and must collect the following information: Installed applications and history of installed applications, ip address, unique installation id, token to send notifications, version of the application, time zone and information about the language of the device.");
+        dialog.addPoliceLine("All details about the use of data are available in our Privacy Policies, as well as all Terms of Service links below.");
+        dialog.setTitleTextColor(Color.parseColor("#222222"));
+        dialog.setAcceptButtonColor(ContextCompat.getColor(this, R.color.colorAccent));
+
+        //  Title
+        dialog.setTitle("Terms of Service");
+
+        //  {terms}Terms of Service{/terms} is replaced by a link to your terms
+        //  {privacy}Privacy Policy{/privacy} is replaced by a link to your privacy policy
+        dialog.setTermsOfServiceSubtitle("If you click on {accept}, you acknowledge that it makes the content present and all the content of our {terms}Terms of Service{/terms} and implies that you have read our {privacy}Privacy Policy{privacy}.");
+
+//        final Intent intent = new Intent(this, SecondActivity.class);
+
+        dialog.setOnClickListener(new PrivacyPolicyDialog.OnClickListener() {
+            @Override
+            public void onAccept(boolean isFirstTime) {
+                Log.e("MainActivity", "Policies accepted");
+//                startActivity(intent);
+//                finish();
+            }
+
+            @Override
+            public void onCancel() {
+                Log.e("MainActivity", "Policies not accepted");
+                finish();
+            }
+        });
+
+        dialog.show();
+
+//        MobileAds.initialize(this, "ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+//                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                startActivity(intent);
+//                finish();
+            }
+        });
+
+//        loadAds();
+
         context = getApplicationContext();
         loginButton = findViewById(R.id.btnLogin);
         registerButton = findViewById(R.id.bntToRegister);
@@ -127,7 +195,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void handleRecipe(View view) {
-        Intent intent = new Intent(this, RecipeActivity.class);
-        startActivity(intent);
+//        loadAds();
+//        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
+//        Intent intent = new Intent(this, RecipeActivity.class);
+//        startActivity(intent);
+    }
+
+    public void loadAds() {
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        mInterstitialAd.show();
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+//                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+                startActivity(intent);
+//                finish();
+            }
+        });
     }
 }

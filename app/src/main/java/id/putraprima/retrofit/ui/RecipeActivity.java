@@ -42,10 +42,16 @@ public class RecipeActivity extends AppCompatActivity {
     int page, id;
     String nama, deskripsi, bahan, langkah, foto;
 
+//    private InterstitialAd mInterstitialAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+
+//        MobileAds.initialize(this, "ca-app-pub-3940256099942544/1033173712");
+//        mInterstitialAd = new InterstitialAd(this);
+//        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
 
         constraintLayout = findViewById(R.id.recipeLayout);
         btnLoadMore = findViewById(R.id.btnLoadMore);
@@ -72,6 +78,12 @@ public class RecipeActivity extends AppCompatActivity {
         page = 1;
         doReload();
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//    }
 
     private void statusBtn(boolean statusR, boolean statusM) {
         if (!status) {
